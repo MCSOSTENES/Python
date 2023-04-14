@@ -10,7 +10,7 @@ NOTE on performance: There are no fancy optimizations required, but still the mo
 
 """
 
-def is_prime(num):
+def is_prime1(num):
     if num < 2 or (num**(1/2)).is_integer():
         return False
     if num <10:
@@ -21,6 +21,11 @@ def is_prime(num):
         if num%div == 0: 
             return False
     return True
+
+# melhor solucao ao meu ver
+def is_prime(n):
+    #se n<1 retorna falso / a funcao all() retorna true se todos os n%i forem diferentes de 0 (false)
+    return n>1 and all(n%i for i in range(2, int(n**.5+1)))
 
 print(is_prime(617969881))   #,  False, "0  is not prime")
 #print(is_prime(1))   #,  False, "1  is not prime")
