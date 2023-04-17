@@ -35,33 +35,46 @@ array = [
     ["name4", 140, ["B", "A", "A", "C", "A"]]
 ]
 
-def find_hack(arr):
-    
+#My solution
+def find_hack1(arr):
     hacked = []
     for j in range (0, len(arr)):
         count = 0
-        countAB = 0
-        countCD = 0
         for i in range (0, len(arr[j][2])):
-            if arr[j][2][i] == "A":
-                count += 30
-                countAB += 1
-            elif arr[j][2][i] == "B":
-                count += 20
-                countAB += 1
-            elif arr[j][2][i] == "C":
-                count += 10
-                countCD += 1
-            elif arr[j][2][i] == "D":
-                count += 5
-                countCD += 1
-            if countAB >= 5 and countCD == 0:
-                count += 20
-            if count > 200:
-                count = 200
-        if count != arr[j][1]:
+            if arr[j][2][i] == "A": count += 30
+            elif arr[j][2][i] == "B": count += 20
+            elif arr[j][2][i] == "C": count += 10
+            elif arr[j][2][i] == "D": count += 5
+                
+        if len(arr[j][2]) > 4 and all(x in {"A","B"} for x in arr[j][2]):
+            count += 20
+        if count > 200:
+            count = 200
+        if count != int(arr[j][1]):
             hacked.append(arr[j][0])
     return hacked
+
+#Best pratices
+PTS       = {'A':30, 'B':20, 'C':10, 'D':5}
+MAX_PTS   = 200
+HAS_BONUS = set('AB')
+BONUS_PTS = 20
+
+def find_hack(arr):
+    # pegar o nome de [name,pts,card] do arr, se pts forem diferente do minino entre 200 e a soma dos pontos 
+    return [name for name,pts,card in arr if pts != min( MAX_PTS, 
+    #soma os pontos do dic. PTS get retorna 0 se nao tiver a letra no dic.                                  
+            sum(PTS.get(n,0) for n in card) + 
+                    #verifica de tem bonus o operador <= é utilizado para verificar* se um conjunto é um subconjunto (ou subconjunto próprio) de outro conjunto.
+                    BONUS_PTS * (len(card)>4 and set(card)<=HAS_BONUS) )]
+
+"""
+*
+Por exemplo, se card for ["A", "B", "C"] e HAS_BONUS for {"A", "B", "C", "D"}, a expressão set(card) <= HAS_BONUS será avaliada como True, já que o conjunto {"A", "B", "C"} é um subconjunto próprio do conjunto {"A", "B", "C", "D}".
+
+Já se card for ["A", "B", "C", "D", "E"] e HAS_BONUS for {"A", "B", "C", "D"}, a expressão set(card) <= HAS_BONUS será avaliada como False, já que o conjunto {"A", "B", "C", "D", "E"} não é um subconjunto (ou subconjunto próprio) do conjunto {"A", "B", "C", "D}".
+
+"""
 
 
 print(find_hack(array))
